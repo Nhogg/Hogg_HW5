@@ -223,6 +223,7 @@ class BloomFilter {
      * was found and exit the loop. After checking all hash functions and
      * confirming that none of them have the correct bits set, we return false.
      *
+     *
      * @param s String value to search for
      * @return boolean - false if not in set, else true for most probably in set
      ***/
