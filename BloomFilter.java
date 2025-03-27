@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Nathan Hogg / Section 002
  *
  *   Note, additional comments provided throughout source code is
  *   for educational purposes.
@@ -24,9 +24,9 @@ import java.lang.Math;
  * required for the set. It effectively works as follows:
  *    1) We allocate 'm' bits to represent the set data.
  *    2) We provide a hash function, which, instead of a single hash code, 
-         produces'k' hash codes and sets those bits.
+ produces'k' hash codes and sets those bits.
  *    3) To add an element to the set, we derive bit indexes from all 'k' 
-         hash codes and set those bits.
+ hash codes and set those bits.
  *    4) To determine if an element is in the set, we again calculate the 
  *       corresponding hash codes and bit indexes, and say it is likely 
  *       present if and only if all corresponding bits are set.
@@ -65,10 +65,10 @@ import java.lang.Math;
  * available online to determine how to adjust the variables inorder to 
  * achieve the desired probability of false positive rates that you can 
  * tolerate and/or desire for your application, e.g.,:
- *  - https://toolslick.com/programming/data-structure/bloom-filter-calculator
- *  - https://www.engineersedge.com/calculators/bloom_filter_calculator_15596.htm
- *  - https://www.di-mgt.com.au/bloom-calculator.html
- *  - https://programming.guide/bloom-filter-calculator.html
+ *  - <a href="https://toolslick.com/programming/data-structure/bloom-filter-calculator">...</a>
+ *  - <a href="https://www.engineersedge.com/calculators/bloom_filter_calculator_15596.htm">...</a>
+ *  - <a href="https://www.di-mgt.com.au/bloom-calculator.html">...</a>
+ *  - <a href="https://programming.guide/bloom-filter-calculator.html">...</a>
  */
 
 class BloomFilter {
@@ -205,25 +205,36 @@ class BloomFilter {
     }
 
 
-    /*
+    /***
      * Method contains
      *
      * The method will check the bits in the bloom filter map for each
      * of the 'k' hash codes based on the passed in parameter. It returns
      * false if not in the set, else true if most probably in the set.
      *
-     * @param boolean - false if not in set, else true for most probably in set
-     */
+     * In order to determine if the current bloom filter contains
+     * string s, we need to loop over each hash function in the filter.
+     * We need to compute the hash value of string s using
+     * the i-th hash function. Next, we determine the bit number
+     * using the same method as in method add(). This allows
+     * us to determine the position in the array where s could be mapped.
+     * Finally, we check the current location to see if it matches
+     * our hash code. If it does, we return true to signify that it
+     * was found and exit the loop. After checking all hash functions and
+     * confirming that none of them have the correct bits set, we return false.
+     *
+     * @param s String value to search for
+     * @return boolean - false if not in set, else true for most probably in set
+     ***/
 
     public boolean contains(String s) {
-
-        // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE
-        //
-        // HINT: the bitmap is the private class variable 'data', and it is
-        // of type BitSet (Java class BitSet). See Oracle documentation for
-        // this class on available methods. You can also see how method 'add'
-        // in this class uses the object.
-
+        for (int i = 0; i < noHashes; i++) {
+            long hc = hashCode(s, i);
+            int bitNo = (int) (hc) & this.hashMask;
+            if (data.get(bitNo)) {
+                return true;
+            }
+        }
         return false;
     }
 
